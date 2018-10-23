@@ -23,3 +23,10 @@ export async function text(param) {
   };
   return request('/book/content',options);
 }
+export async function jsoup(param) {
+  const options = {
+    method: 'POST',
+    body: param,
+  };
+  return request('/jsoupnode/selectNode',options);
+}

@@ -109,6 +109,10 @@ export const getRouterData = app => {
     '/book/text': {
       component: dynamicWrapper(app, ['book'], () => import('../routes/Book/Text')),
     },
+     //  爬虫
+     '/jsoup/jsoup-list': {
+      component: dynamicWrapper(app, ['jsoup'], () => import('../routes/Jsoup/Jsoup')),
+    },
     '/form/step-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
     },
@@ -128,7 +132,7 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
     },
     '/form/advanced-eidit': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/Eidittable')),
+      component: dynamicWrapper(app, ['book'], () => import('../routes/Forms/Eidittable')),
     },
     '/list/table-list': {
       component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),

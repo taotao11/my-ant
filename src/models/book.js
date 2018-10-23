@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import {query,section,text} from '../services/book';
+import {query,section,text,jsoup} from '../services/book';
 
 export default {
   namespace: 'book',
@@ -8,6 +8,7 @@ export default {
   state: {
     text: {},
     section: {},
+    jsoup:[],
     bookData: [
       {
         "name": "永生的战法术师",
@@ -66,6 +67,15 @@ export default {
         payload: response,
       });
     },
+    *jsoup({ payload }, { call, put }) {
+      console.log(1);
+      const response = yield call(jsoup, payload.param);
+      console.log(response)
+      yield put({
+        type: 'getJsoup',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -91,6 +101,14 @@ export default {
       return {
         ...state,
         text: bookData,
+      };
+    },
+    getJsoup(state, { payload }) {
+      const bookData = payload.data;
+      console.log(bookData);
+      return {
+        ...state,
+        jsoup: bookData,
       };
     },
   },

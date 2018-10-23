@@ -7,7 +7,13 @@ class EditableTable extends React.Component {
         this.showCurRowMessage = this.showCurRowMessage.bind(this);
     }
     componentDidMount() {
-
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'book/jsoup',
+          payload: {
+            param: {}
+          },
+        });
     }
 
     //展示当前行信息
@@ -16,7 +22,19 @@ class EditableTable extends React.Component {
 
     render() {
         let self = this;
-
+        const jsoupColumns = [
+            { title: 'id', dataIndex: 'id', key: 'id' },
+            { title: '爬虫名称', dataIndex: 'name', key: 'name'},
+            { title: '抓取规则', dataIndex: 'cssQuery', key: 'cssQuery' },
+            { title: '父id', dataIndex: 'parentId', key: 'parentId' },
+            {
+                title: '操作', dataIndex: '', key: 'operation', render: function (text, record, index) {
+                    return <a href="#" name="delete" onClick={function () { self.showCurRowMessage(record) }} >信息</a>;
+                }
+            },
+            //精简写法
+            //{ title: '操作', dataIndex: '', key: 'operation', render: (text, record, index) => <a href="#" name="delete" onClick={() => self.showCurRowMessage(record)}>信息</a> },
+        ];
         const columns = [
             { title: '姓名', dataIndex: 'name', key: 'name' },
             { title: '年龄', dataIndex: 'age', key: 'age', render: (text, record, index) => (Math.floor(record.age / 10)) * 10 + "多岁" },
@@ -64,9 +82,10 @@ class EditableTable extends React.Component {
 
         return (
             <div>
-                <Table columns={columns}
-                    rowSelection={rowSelection}
-                    dataSource={data}
+                <Table columns={jsoupColumns}
+                    // rowSelection={rowSelection}
+                    dataSource={this.props.jsoups}
+                    rowKey="id"
                     className="table"
                 />
             </div>
@@ -74,8 +93,10 @@ class EditableTable extends React.Component {
 
     }
 }
-
-export default connect(({ global, loading }) => ({
-    collapsed: global.collapsed,
-    submitting: loading.effects['form/submitAdvancedForm'],
-}))(Form.create()(EditableTable));
+function mapStateToProps(state, ownProps) {
+    return {
+        jsoups: state.book.jsoup,
+    }
+    // loading、data都是来自对应的reduce
+  }
+export default connect(mapStateToProps)(Form.create()(EditableTable));

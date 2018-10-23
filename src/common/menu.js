@@ -56,6 +56,17 @@ const menuData = [
     ],
   },
   {
+    name: '爬虫管理',
+    icon: 'form',
+    path: 'jsoup',
+    children: [
+      {
+        name: '爬虫列表',
+        path: 'jsoup-list',
+      },
+    ],
+  },
+  {
     name: '表单页',
     icon: 'form',
     path: 'form',

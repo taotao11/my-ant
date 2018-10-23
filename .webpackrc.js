@@ -19,6 +19,16 @@ export default {
       "secure": false,
       "changeOrigin": true,
     },
+    "/jsoupnode/": {
+      "target": "http://127.0.0.1:8085",
+      "secure": false,
+      "changeOrigin": true,
+    },
+    "/jsoup/": {
+      "target": "http://127.0.0.1:8085",
+      "secure": false,
+      "changeOrigin": true,
+    },
   },
   externals: {
     '@antv/data-set': 'DataSet',

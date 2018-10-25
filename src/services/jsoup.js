@@ -1,4 +1,5 @@
 import request from '../utils/request';
+import getRequest from '../utils/getRequest';
 
 export async function jsoup(param) {
   const options = {
@@ -20,4 +21,8 @@ export async function addJsoupCon(param) {
     body: param,
   };
   return request('/jsoup/insert',options);
+}
+export async function getJsoupCon(param) {
+
+  return getRequest('/jsoup/selectOneById',param);
 }

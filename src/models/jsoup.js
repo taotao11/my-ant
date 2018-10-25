@@ -1,12 +1,13 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import {jsoup,addJsoup,addJsoupCon} from '../services/jsoup';
+import {jsoup,addJsoup,addJsoupCon,getJsoupCon} from '../services/jsoup';
 
 export default {
   namespace: 'jsoup',
 
   state: {
     jsoup:[],
+    jsoupCon:{},
     // 是否刷新
     record: false,
   },
@@ -49,6 +50,14 @@ export default {
         message.message(response.message)
       } 
     },
+    *getJsoupCon({ payload }, { call, put }) {
+      const response = yield call(getJsoupCon, payload.param);
+      console.log(response.data.name)
+      yield put({
+        type: 'retJsoupCon',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -58,6 +67,15 @@ export default {
       return {
         ...state,
         jsoup: bookData,
+        isSpin: false,
+      };
+    },
+    retJsoupCon(state, { payload }) {
+      const jsoupData = payload.data;
+      console.log(jsoupData);
+      return {
+        ...state,
+        jsoupCon: jsoupData,
         isSpin: false,
       };
     },

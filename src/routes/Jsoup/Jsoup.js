@@ -5,6 +5,7 @@ import ModelFormComp from '../../utils/ModelFormComp';
 const FormItem = Form.Item;
 class jsoup extends React.Component {
     state = {
+        jsoupSelVis: false,
         visible: false,
         parentId: null,
         jsoupVis: false,
@@ -90,8 +91,26 @@ class jsoup extends React.Component {
           }
         });
     }
+    getJsoupCon = (record) => {
+        console.log(record.jId)
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'jsoup/getJsoupCon',
+            payload: {
+                param: {id: record.jId}
+            },
+        });
+        this.setState({
+            jsoupSelVis: true,
+        })
+    }
+    jsoupSelVisonCancel =() => {
+        this.setState({
+            jsoupSelVis: false,
+        })
+    }
     // 爬虫表单
-    jsoupForm = () => {
+    jsoupForm = (flag) => {
         const { getFieldDecorator } = this.props.form;
         
         return (
@@ -186,7 +205,7 @@ class jsoup extends React.Component {
                     return (
                         <span>
                             <Button type="primary" size="small" onClick={() => self.addjsoup(record)}>添加</Button>
-                            {record.jId == null ? null :<Button type="primary" size="small">查看</Button>}
+                            {record.jId == null ? null :<Button type="primary" onClick = {() => self.getJsoupCon(record)} size="small">查看</Button>}
                             {
                                 (record.children.length == 0 && record.jId == null) ? 
                                 <Button type="primary" size="small" onClick={() =>self.mFcomp(record)}>小说</Button> : null
@@ -349,6 +368,17 @@ class jsoup extends React.Component {
                     saveForm= {this.jsoupOSaveForm}
                     record = { record }
                 />
+                <ModelFormComp
+                    title= '爬虫内容查看'
+                    visible= { this.state.jsoupSelVis}
+                    onOk= {this.jsoupSelVisonCancel}
+                    onCancel={this.jsoupSelVisonCancel}
+                    okText= '确定'
+                    loading= {false}
+                    columns= { columns }
+                    saveForm= {this.jsoupOSaveForm}
+                    record = { this.props.jsoupCon }
+                />
             </div>
         );
 
@@ -360,6 +390,7 @@ function mapStateToProps(state, ownProps) {
         jsoups: jsoup.jsoup,
         isSpin: jsoup.isSpin,
         record: jsoup.record,
+        jsoupCon: jsoup.jsoupCon,
     }
     // loading、data都是来自对应的reduce
 }

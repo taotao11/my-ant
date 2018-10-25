@@ -42,44 +42,48 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  const defaultOptions = {
-    credentials: 'include',
-  };
-  const newOptions = { ...defaultOptions, ...options };
-  if (
-    newOptions.method === 'POST' ||
-    newOptions.method === 'PUT' ||
-    newOptions.method === 'DELETE'
-  ) {
-    if (!(newOptions.body instanceof FormData)) {
-      newOptions.headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        ...newOptions.headers,
-      };
-      newOptions.body = JSON.stringify(newOptions.body);
-    } else {
-      // newOptions.body is FormData
-      newOptions.headers = {
-        Accept: 'application/json',
-        ...newOptions.headers,
-      };
-    }
-  } 
-//fetch请求  s
+export default function getRequest(url, options) {
+//   function getRequest(url) {
+//     var opts = {
+//         method:"GET"
+//     }
+//     fetch(url,opts)
+//         .then((response) => {
+//             return response.text();  //返回一个带有文本的对象
+//         })
+//         .then((responseText) => {
+//             alert(responseText)
+//         })
+//         .catch((error) => {
+//             alert(error)
+//         })
+
+// }
+  
+//fetch请求  
 // fetch(url,{  
 //     method: 'GET',  
 // })  
 //     .then((response) => {}).catch((error) => {  
 //         alert(error)  
-//     })  
-  return fetch(url, newOptions)
+//     })
+  //  js 对象遍历  ?id=1&name=2
+  let parStr = "?";
+  Object.keys(options).forEach(function(key){
+    parStr = parStr + key + "=" + options[key];
+    if(Object.keys(options).length > 1){
+      parStr = parStr + "&";
+    }
+  });
+  return fetch(url + parStr, {
+                  method: 'GET',
+                  headers: new Headers({
+                    'Accept': 'application/json' // 通过头指定，获取的数据类型是JSON
+                  })
+                }
+              )
     .then(checkStatus)
     .then(response => {
-      if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
-      }
       return response.json();
     })
     .catch(e => {
